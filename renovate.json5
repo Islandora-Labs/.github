@@ -12,7 +12,7 @@
       ],
       groupName: 'all non-major dependencies',
       schedule: [
-        '10 22 * * 3',
+        '* 22 * * 3',
       ],
       matchPackageNames: [
         '*',
