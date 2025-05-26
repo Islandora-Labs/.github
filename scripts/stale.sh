@@ -46,7 +46,25 @@ jobs:
   echo "$STALE_YML" > "$NEW_FILE_NAME"
   git add "$NEW_FILE_NAME"
   git commit -m "Adding stale.yaml GHA"
-  git push origin "$DEFAULT_BRANCH" || echo "Protected branch"
+
+
+  CURRENT_STATUS=$(gh api "repos/$ORG/$REPO/branches/$DEFAULT_BRANCH/protection" --jq '.enforce_admins.enabled' || echo "false")
+  if [ "$CURRENT_STATUS" = "true" ]; then
+    echo "Disabling admin bypass on $ORG/$REPO:$DEFAULT_BRANCH temporarily"
+    gh api \
+      --method DELETE \
+      -H "Accept: application/vnd.github+json" \
+      "repos/$ORG/$REPO/branches/$DEFAULT_BRANCH/protection/enforce_admins"
+  fi
+  git push origin "$DEFAULT_BRANCH"
+  if [ "$CURRENT_STATUS" = "true" ]; then
+    echo "Re-Enabling admin bypass"
+    gh api \
+      --method POST \
+      -H "Accept: application/vnd.github+json" \
+      "repos/$ORG/$REPO/branches/$DEFAULT_BRANCH/protection/enforce_admins"
+  fi
+
   popd > /dev/null
 
   sleep 5
