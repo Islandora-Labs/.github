@@ -2,6 +2,8 @@ name: 'Manage stale issues and PRs'
 on:
   workflow_dispatch:
   workflow_call:
+  schedule:
+    - cron: '40 21 * * *'
 
 jobs:
   stale:
