@@ -33,7 +33,9 @@
     'dependencies',
   ],
   osvVulnerabilityAlerts: true,
-  dependencyDashboardOSVVulnerabilitySummary: 'unresolved',
+  dependencyDashboard: {
+    osvVulnerabilitySummary: 'unresolved',
+  },
   vulnerabilityAlerts: {
     enabled: true,
   },
